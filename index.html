@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root { --bg: #0a1230; --panel: rgba(10,18,48,.82); --text: #fff; --gold: #ffe14d; color-scheme: dark; }
-  html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; overscroll-behavior: none; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-  body { font-family: 'Press Start 2P', 'Courier New', monospace; color: var(--text); }
-  #wrap { position: absolute; left: 0; top: 0; width: 420px; height: 640px; transform-origin: 0 0; overflow: hidden; cursor: pointer; }
+  html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; overscroll-behavior: none; touch-action: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+  body { position: fixed; inset: 0; -webkit-tap-highlight-color: transparent; font-family: 'Press Start 2P', 'Courier New', monospace; color: var(--text); }
+  #wrap { -webkit-tap-highlight-color: transparent; outline: none; position: absolute; left: 0; top: 0; width: 420px; height: 640px; transform-origin: 0 0; overflow: hidden; cursor: pointer; }
   canvas { position: absolute; inset: 0; width: 420px; height: 640px; image-rendering: pixelated; }
   #cat { position: absolute; left: 0; top: 0; width: 72px; image-rendering: pixelated; pointer-events: none; will-change: transform; }
   #score { position: absolute; top: 28px; width: 100%; text-align: center; font-size: 34px; text-shadow: 3px 3px 0 #000; pointer-events: none; }
@@ -120,9 +120,9 @@
     initAudio();
     if (state === 'ready') { state = 'play'; $('panel').classList.add('hidden'); startMusic(); }
     if (state === 'play') { cat.vy = -FLAP; sfx('jump'); }
-    else if (state === 'dead' && performance.now() - deadAt > 500) reset();
+    else if (state === 'dead' && performance.now() - deadAt > 300) reset();
   }
-  $('wrap').addEventListener('pointerdown', e => { e.preventDefault(); flap(); });
+  document.addEventListener('pointerdown', e => { if (e.button > 0) return; e.preventDefault(); flap(); });
   addEventListener('keydown', e => {
     if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) { e.preventDefault(); if (!e.repeat) flap(); }
     if (e.code === 'KeyM') { initAudio(); toggleMute(); }
